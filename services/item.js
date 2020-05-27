@@ -1,4 +1,4 @@
-const ItemDAO = require("../datamodel/itemdao")
+const ItemDAO = require("../datamodel/itemdao");
 
 module.exports = class ItemService {
     constructor(db) {
@@ -6,7 +6,6 @@ module.exports = class ItemService {
     }
 
     isValid(item) {
-        console.log(item)
         item.label = item.label.trim();
         if (item.label === "") return false;
         if (item.quantite < 1 || item.quantite == null) return false;

@@ -29,9 +29,9 @@ module.exports = class ItemDAO extends BaseDAO {
             [item.id, item.quantite, item.label, item.ischecked, item.listid])
     }
 
-    getById(id, userid){
+    getById(id){
         return new Promise((resolve, reject) =>
-            this.db.query(`SELECT item.id, quantite, item.label, ischecked, listid FROM item INNER JOIN list ON listid = list.id WHERE item.id = ${id} AND useraccountid = ${userid}`)
+            this.db.query(`SELECT id, quantite, label, ischecked, listid FROM item WHERE id = ${id}`)
                 .then(res => resolve(res.rows))
                 .catch(e => reject(e)))
     }

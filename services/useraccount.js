@@ -10,14 +10,10 @@ module.exports = class UserAccountService {
         return this.dao.insert(new UserAccount(displayname, login, this.hashPassword(password)))
     }
     async validatePassword(login, password) {
-        console.log('login',login,'password',password)
         const user = await this.dao.getByLogin(login.trim());
-        console.log('USER', user)
-        console.log(user.challenge, password)
         return this.comparePassword(password, user.challenge)
     }
     comparePassword(password, hash) {
-        console.log(password, 'aaaaa', hash)
         return bcrypt.compareSync(password, hash)
     }
     hashPassword(password) {

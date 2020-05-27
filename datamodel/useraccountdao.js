@@ -9,7 +9,6 @@ module.exports = class UserAccountDAO extends BaseDAO {
             [useraccount.displayName, useraccount.login, useraccount.challenge])
     }
     getByLogin(login) {
-        console.log(login)
         return new Promise((resolve, reject) =>
             this.db.query("SELECT * FROM useraccount WHERE login=$1", [ login ])
                 .then(res => resolve(res.rows[0]) )

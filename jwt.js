@@ -15,7 +15,6 @@ module.exports = (userAccountService) => {
                     res.status(401).end()
                     return
                 }
-                console.log(user)
                 try {
                     req.user = await userAccountService.dao.getByLogin(user.login)
                     return next()

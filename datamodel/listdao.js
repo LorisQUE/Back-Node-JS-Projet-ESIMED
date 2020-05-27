@@ -20,9 +20,9 @@ module.exports = class ListDAO extends BaseDAO {
             [list.id, list.label, list.date, list.isarchived])
     }
 
-    getById(id, userid){
+    getById(id){
         return new Promise((resolve, reject) =>
-            this.db.query(`SELECT * FROM list WHERE id = ${id} AND useraccountid = ${userid}`)
+            this.db.query(`SELECT * FROM list WHERE id = ${id}`)
                 .then(res => resolve(res.rows))
                 .catch(e => reject(e)))
     }
