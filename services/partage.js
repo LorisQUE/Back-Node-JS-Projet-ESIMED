@@ -6,7 +6,7 @@ module.exports = class PartageService {
     }
 
     isValid(partage) {
-        if (!!partage.user_id || !!partage.list_id) return false;
+        if (!(!!partage.user_id) || !(!!partage.list_id)) return false;
         if (partage.droit == undefined || partage.droit == null) return false;
         return true
     }

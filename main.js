@@ -26,7 +26,7 @@ const jwt = require('./jwt')(userAccountService);
 require('./api/useraccount')(app, userAccountService, jwt);
 require('./api/list')(app, listService, jwt);
 require('./api/item')(app, itemService, listService, jwt);
-require('./api/partage')(app, partageService, jwt);
+require('./api/partage')(app, partageService, listService, userAccountService, jwt);
 const seeder = require('./datamodel/seeder');
 seeder.listSeeder(listService, userAccountService, partageService)
 .then(_ => seeder.itemSeeder(itemService)
