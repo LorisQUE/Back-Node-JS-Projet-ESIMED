@@ -1,4 +1,4 @@
-const BaseDAO = require('./basedao')
+const BaseDAO = require('./basedao');
 
 module.exports = class UserAccountDAO extends BaseDAO {
     constructor(db) {
@@ -7,6 +7,12 @@ module.exports = class UserAccountDAO extends BaseDAO {
     insert(useraccount) {
         return this.db.query("INSERT INTO useraccount(displayname,login,challenge) VALUES ($1,$2,$3)",
             [useraccount.displayName, useraccount.login, useraccount.challenge])
+    };
+    getAll(){
+        return new Promise((resolve, reject) =>
+            this.db.query("SELECT id, displayname, login FROM useraccount")
+                .then(res => resolve(res.rows) )
+                .catch(e => reject(e)));
     };
     getByLogin(login) {
         return new Promise((resolve, reject) =>
@@ -17,7 +23,7 @@ module.exports = class UserAccountDAO extends BaseDAO {
     getById(id){
         return new Promise((resolve, reject) =>
             this.db.query(`SELECT * FROM useraccount WHERE id = ${id}`)
-                .then(res => resolve(res.rows))
+                .then(res => resolve(res.rows[0]))
                 .catch(e => reject(e)))
     };
 };

@@ -5,6 +5,18 @@ module.exports = (app, svc, jwt) => {
             res.status(400).end();
             return
         }
+        app.get("/useraccount", jwt.validateJWT, async (req, res) => {
+            try {
+                const user = await svc.dao.getAll();
+                console.log('user', user)
+                if (!(!!user)) return res.status(404).end();
+                return res.json(user);
+            }
+            catch (e) {
+                console.log(e);
+                res.status(400).end();
+            }
+        });
         svc.validatePassword(login, password)
             .then(authenticated => {
                 if (!authenticated) {
@@ -16,7 +28,6 @@ module.exports = (app, svc, jwt) => {
             .catch(e => {
                 console.log(e);
                 res.status(500).end();
-            })
-
-    })
-}
+            });
+    });
+};
