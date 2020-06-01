@@ -11,6 +11,7 @@ module.exports = class PartageDAO extends BaseDAO {
     };
 
     //Get toutes les listes partagées avec un user --> 'Les listes qu'on a partagées avec moi'
+    //INUTILE ?? POURQUOI LIRE LES LISTES PARTAGEES DE QQUN DAUTRE ?? A ENLEVER ?
     getAllByUserId(id) {
         return new Promise((resolve, reject) =>
             this.db.query("SELECT * FROM partage INNER JOIN list ON list.id = list_id WHERE user_id = $1 ORDER BY list_id", [id])

@@ -62,9 +62,9 @@ module.exports = (app, servicePartage, serviceList, serviceUser, jwt) => {
         const user = await serviceUser.dao.getById(partage.user_id);
         const checking = await servicePartage.dao.checkExisting(partage.user_id, partage.list_id);
         //Si l'id est null ou que le partage est invalide ou que la ligne existe -> erreur 400
-        if (!servicePartage.isValid(partage) || !!checking[0] ) return res.status(400).end();
+        if (!servicePartage.isValid(partage) || !(!!checking[0]) ) return res.status(400).end();
         //Si la liste ou l'user n'existe pas -> erreur 404
-        if (!(!!list[0]) || !(!!user[0])) return res.status(404).end();
+        if (!(!!list[0]) || !(!!user)) return res.status(404).end();
         //Si la liste n'est pas a l'user ou s'il se partage à lui même -> 403
         if (list[0].useraccountid !== req.user.id || partage.user_id == req.user.id) return res.status(403).end();
         servicePartage.dao.insert(partage)
