@@ -7,8 +7,7 @@ module.exports = (app, svc, jwt) => {
         }
         app.get("/useraccount", jwt.validateJWT, async (req, res) => {
             try {
-                const user = await svc.dao.getAll();
-                console.log('user', user)
+                const user = await svc.dao.getAll(req.user.id);
                 if (!(!!user)) return res.status(404).end();
                 return res.json(user);
             }

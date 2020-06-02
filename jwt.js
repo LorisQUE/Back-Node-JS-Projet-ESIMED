@@ -12,6 +12,7 @@ module.exports = (userAccountService) => {
             const token = req.headers.authorization.split(" ")[1];
             jwt.verify(token, jwtKey, {algorithm: "HS256"},  async (err, user) => {
                 if (err) {
+                    console.log(err)
                     res.status(401).end()
                     return
                 }
@@ -19,7 +20,7 @@ module.exports = (userAccountService) => {
                     req.user = await userAccountService.dao.getByLogin(user.login)
                     return next()
                 } catch(e) {
-                    console.log(e)
+                    console.log(e);
                     res.status(401).end()
                 }
 

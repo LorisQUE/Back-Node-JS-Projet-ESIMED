@@ -21,7 +21,6 @@ module.exports = class PartageDAO extends BaseDAO {
 
     //Get tout les partages avec une liste --> 'Voir à qui a été partagée cette liste'
     getAllByListId(id) {
-        console.log('id :', id)
         return new Promise((resolve, reject) =>
             this.db.query("SELECT partage.id, user_id, list_id, droit, displayname, login FROM partage INNER JOIN useraccount ON useraccount.id = user_id WHERE list_id = $1 ORDER BY user_id", [id])
                 .then(res => resolve(res.rows))

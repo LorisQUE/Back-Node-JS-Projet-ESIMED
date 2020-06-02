@@ -29,10 +29,10 @@ module.exports = (app, servicePartage, serviceList, serviceUser, jwt) => {
     //Get tout les partages avec une liste --> 'Voir à qui a été partagée cette liste'
     app.get("/partageList/:id", jwt.validateJWT, async (req, res) => {
         try {
-            const partage = await servicePartage.dao.getAllByListId(req.params.id);
-            //const list = await serviceList.dao.getById(partage[0].list_id);
-            if (partage == undefined || partage.length == 0) return res.status(404).end();
-            //if (list[0].useraccountid !== req.user.id) return res.status(403).end();
+            const list = await serviceList.dao.getById(req.params.id);
+            if (!(!!list)) return res.status(404).end();
+            if (list[0].useraccountid !== req.user.id) return res.status(403).end();
+            const partage = await servicePartage.dao.getAllByListId(list[0].id);
             return res.json(partage);
         }
         catch (e) {
