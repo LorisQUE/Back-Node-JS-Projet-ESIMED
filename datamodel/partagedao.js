@@ -27,10 +27,10 @@ module.exports = class PartageDAO extends BaseDAO {
                 .catch(e => reject(e)));
     };
 
-    //Get tout les partages de mes listes
-    getAll(user) {
+    //Get toutes les listes partagées avec moi
+    getAll(id) {
         return new Promise((resolve, reject) =>
-            this.db.query("SELECT * FROM partage INNER JOIN list ON list.id = list_id WHERE useraccountid = $1 ORDER BY list_id", [user.id])
+            this.db.query("SELECT partage.id, user_id, list_id, droit, label, date, useraccountid, isArchived, displayname, login FROM partage INNER JOIN list ON list.id = list_id INNER JOIN useraccount ON useraccountid = useraccount.id WHERE user_id = $1 ORDER BY list_id", [id])
                 .then(res => resolve(res.rows))
                 .catch(e => reject(e)));
     };

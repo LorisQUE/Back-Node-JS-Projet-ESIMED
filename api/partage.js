@@ -3,7 +3,7 @@ module.exports = (app, servicePartage, serviceList, serviceUser, jwt) => {
     //Get All partages de MES listes
     app.get("/partage", jwt.validateJWT, async (req, res) => {
         try {
-            res.json(await servicePartage.dao.getAll(req.user))
+            res.json(await servicePartage.dao.getAll(req.user.id))
         }
         catch (e) {
             console.log(e);
