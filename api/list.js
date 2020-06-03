@@ -6,8 +6,8 @@ module.exports = (app, serviceList, jwt) => {
         catch (e) {
             console.log(e);
             res.status(500).end()
-        }
-    })
+        };
+    });
 
     app.post("/list", jwt.validateJWT, (req, res) => {
         const list = req.body;
@@ -20,21 +20,34 @@ module.exports = (app, serviceList, jwt) => {
             .catch(e => {
                 console.log(e);
                 res.status(500).end()
-            })
-    })
+            });
+    });
 
     app.get("/list/:id", jwt.validateJWT, async (req, res) => {
         try {
             const list = await serviceList.dao.getById(req.params.id);
             if (list == undefined || list.length == 0) return res.status(404).end();
             if (list[0].useraccountid !== req.user.id) return res.status(403).end();
+            return res.json(list[0]);
+        }
+        catch (e) {
+            console.log(e);
+            res.status(400).end();
+        };
+    });
+
+    app.get("/listPartage/:id", jwt.validateJWT, async (req, res) => {
+        try {
+            const list = await serviceList.dao.getPartageById(req.params.id);
+            if (!(!!list)) return res.status(404).end();
+            if (list.user_id !== req.user.id) return res.status(403).end();
             return res.json(list);
         }
         catch (e) {
             console.log(e);
             res.status(400).end();
-        }
-    })
+        };
+    });
 
     app.delete("/list/:id", jwt.validateJWT, async (req, res) => {
         const list = await serviceList.dao.getById(req.params.id);
@@ -45,8 +58,8 @@ module.exports = (app, serviceList, jwt) => {
             .catch(e => {
                 console.log(e);
                 res.status(500).end()
-            })
-    })
+            });
+    });
 
     app.put("/list", jwt.validateJWT, async (req, res) => {
         const list = req.body;
@@ -59,6 +72,6 @@ module.exports = (app, serviceList, jwt) => {
             .catch(e => {
                 console.log(e);
                 res.status(500).end();
-            })
-    })
-}
+            });
+    });
+};

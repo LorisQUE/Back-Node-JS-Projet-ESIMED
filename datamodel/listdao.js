@@ -26,4 +26,10 @@ module.exports = class ListDAO extends BaseDAO {
                 .then(res => resolve(res.rows))
                 .catch(e => reject(e)))
     }
+    getPartageById(id){
+        return new Promise((resolve, reject) =>
+            this.db.query(`SELECT list.id, label, date, isarchived, useraccountid, user_id, droit FROM list INNER JOIN partage ON list.id = list_id WHERE list.id = ${id}`)
+                .then(res => resolve(res.rows[0]))
+                .catch(e => reject(e)))
+    }
 }
