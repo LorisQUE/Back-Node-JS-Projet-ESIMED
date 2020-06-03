@@ -12,7 +12,7 @@ module.exports = class ItemDAO extends BaseDAO {
 
     getAllFromList(listId, userid) {
         return new Promise((resolve, reject) =>
-            this.db.query("SELECT item.id, quantite, item.label, ischecked, listid FROM item INNER JOIN list ON  listid = list.id INNER JOIN partage ON list_id = listid WHERE listid = $1 AND (useraccountid = $2 OR user_id = $2)",[listId, userid])
+            this.db.query("SELECT item.id, quantite, item.label, ischecked, listid FROM item INNER JOIN list ON  listid = list.id WHERE listid = $1 AND useraccountid = $2",[listId, userid])
                 .then(res => resolve(res.rows))
                 .catch(e => reject(e)))
     }
