@@ -1,7 +1,7 @@
 module.exports = (app, serviceList, jwt) => {
     app.get("/list", jwt.validateJWT, async (req, res) => {
         try {
-            res.json(await serviceList.dao.getAll(req.user))
+            res.json(await serviceList.dao.getAll(req.user));
         }
         catch (e) {
             console.log(e);
@@ -38,7 +38,7 @@ module.exports = (app, serviceList, jwt) => {
 
     app.get("/listPartage/:id", jwt.validateJWT, async (req, res) => {
         try {
-            const list = await serviceList.dao.getPartageById(req.params.id);
+            const list = await serviceList.dao.getPartageById(req.params.id, req.user.id);
             if (!(!!list)) return res.status(404).end();
             if (list.user_id !== req.user.id) return res.status(403).end();
             return res.json(list);
@@ -65,7 +65,7 @@ module.exports = (app, serviceList, jwt) => {
         const list = req.body;
         const originalList = await serviceList.dao.getById(req.body.id);
         if ((list.id === undefined) || (list.id == null) || (!serviceList.isValid(list))) return res.status(400).end();
-        if (await serviceList.dao.getById(list.id) === undefined) return res.status(404).end();
+        if (!(!!originalList[0])) return res.status(404).end();
         if (originalList[0].useraccountid !== req.user.id) return res.status(403).end();
         serviceList.dao.update(list)
             .then(res.status(200).end())
@@ -73,5 +73,30 @@ module.exports = (app, serviceList, jwt) => {
                 console.log(e);
                 res.status(500).end();
             });
+    });
+
+    app.put("/listPartage", jwt.validateJWT, async (req, res) => {
+        try {
+            console.log('la')
+            console.log('BODY REQUEST', req.body)
+            const list = req.body;
+            console.log('UPDATE D"UNE LISTE PAR UN PARTAGE : ', list);
+            const originalList = await serviceList.dao.getPartageById(list.id, req.user.id);
+            console.log('originakl lkist', originalList);
+            console.log('ici')
+            if (!(!!list.id) || !serviceList.isValid(list)) return res.status(400).end();
+            if (!(!!originalList)) return res.status(404).end();
+            if (originalList.user_id !== req.user.id) return res.status(403).end();
+            serviceList.dao.update(list)
+                .then(res.status(200).end())
+                .catch(e => {
+                    console.log(e);
+                    res.status(500).end();
+                });
+        }
+        catch (e) {
+            console.log(e);
+            res.status(400).end();
+        };
     });
 };

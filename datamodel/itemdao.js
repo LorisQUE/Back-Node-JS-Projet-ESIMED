@@ -32,6 +32,7 @@ module.exports = class ItemDAO extends BaseDAO {
     };
 
     update(item) {
+        console.log('UPDATE ITEM',item)
         return this.db.query("UPDATE item SET quantite=$2, label=$3, isChecked=$4, listid=$5 WHERE id=$1",
             [item.id, item.quantite, item.label, item.ischecked, item.listid])
     };
