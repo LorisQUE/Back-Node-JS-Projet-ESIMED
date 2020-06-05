@@ -9,18 +9,28 @@ module.exports = (app, serviceList, jwt) => {
         };
     });
 
-    app.post("/list", jwt.validateJWT, (req, res) => {
+    app.post("/list", jwt.validateJWT, async (req, res) => {
         const list = req.body;
-        list.useraccountid = req.user.id;
-        if (!serviceList.isValid(list))  {
-            return res.status(400).end()
+        if (!!list.id) { //ANNULATION D'UN DELETE
+            if (!serviceList.isValid(list))  return res.status(400).end();
+            if (!(!!await serviceList.dao.getById(list.id))) return res.status(403).end();
+            serviceList.dao.insertBack(list)
+                .then(res.status(200).end())
+                .catch(e => {
+                    console.log(e);
+                    res.status(500).end()
+                });
         }
+        else{
+        list.useraccountid = req.user.id;
+        if (!serviceList.isValid(list))  return res.status(400).end();
         serviceList.dao.insert(list)
             .then(res.status(200).end())
             .catch(e => {
                 console.log(e);
                 res.status(500).end()
             });
+        }
     });
 
     app.get("/list/:id", jwt.validateJWT, async (req, res) => {
@@ -77,13 +87,8 @@ module.exports = (app, serviceList, jwt) => {
 
     app.put("/listPartage", jwt.validateJWT, async (req, res) => {
         try {
-            console.log('la')
-            console.log('BODY REQUEST', req.body)
             const list = req.body;
-            console.log('UPDATE D"UNE LISTE PAR UN PARTAGE : ', list);
             const originalList = await serviceList.dao.getPartageById(list.id, req.user.id);
-            console.log('originakl lkist', originalList);
-            console.log('ici')
             if (!(!!list.id) || !serviceList.isValid(list)) return res.status(400).end();
             if (!(!!originalList)) return res.status(404).end();
             if (originalList.user_id !== req.user.id) return res.status(403).end();
