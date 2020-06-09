@@ -1,7 +1,9 @@
 module.exports = class UserAccount {
-    constructor(displayName, login, challenge) {
-        this.displayName = displayName;
+    constructor(id, displayname, login, challenge, isConfirmed) {
+        this.id = id;
+        this.displayname = displayname;
         this.login = login;
         this.challenge = challenge;
+        this.isConfirmed = !!isConfirmed;
     }
-}
+};

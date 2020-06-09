@@ -6,8 +6,11 @@ module.exports = class UserAccountService {
     constructor(db) {
         this.dao = new UserAccountDAO(db)
     }
-    insert(displayname, login, password) {
-        return this.dao.insert(new UserAccount(displayname, login, this.hashPassword(password)))
+    insert(displayname, login, password, isConfirmed) {
+        return this.dao.insert(new UserAccount(null, displayname, login, this.hashPassword(password), isConfirmed));
+    }
+    update(id, displayname, login, password, isConfirmed){
+        return this.dao.update(new UserAccount(id, displayname, login, this.hashPassword(password), isConfirmed));
     }
     async validatePassword(login, password) {
         const user = await this.dao.getByLogin(login.trim());
