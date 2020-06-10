@@ -28,19 +28,14 @@ module.exports ={
                             //J'arrive pas de manière asynchrone à attendre la fin du for, pour ajouter mes partage dans la bdd
                             //Alors d'une manière un peu dégeu, j'ai un flag qui passe à true quand la dernière opération du for est fini
                             if(i === 2 && j === 4)flagLoop = true;
-
                             if(flagLoop){
                                 await partageService.dao.insert(new Partage(1, 6, false));
                                 await partageService.dao.insert(new Partage(1, 7, true));
                                 await partageService.dao.insert(new Partage(2, 1, false));
                                 await partageService.dao.insert(new Partage(2, 2, true));
                             }
-
                         }});
             }
-
-
-
             resolve();
         })
     },

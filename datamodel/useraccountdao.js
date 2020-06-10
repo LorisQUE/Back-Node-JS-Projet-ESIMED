@@ -9,16 +9,26 @@ module.exports = class UserAccountDAO extends BaseDAO {
             [useraccount.displayname, useraccount.login, useraccount.challenge, useraccount.isConfirmed])
     };
     update(useraccount) {
-        return this.db.query("UPDATE useraccount SET displayname=$2, login=$3, challenge=$4, isConfirmed=$5 WHERE id=$1",
-            [useraccount.id, useraccount.displayName, useraccount.login, useraccount.challenge, useraccount.isConfirmed]);
+        return this.db.query("UPDATE useraccount SET displayname=$2, login=$3 WHERE id=$1",
+            [useraccount.id, useraccount.displayname, useraccount.login]);
+    };
+    updatePassword(useraccount) {
+        return this.db.query("UPDATE useraccount SET challenge=$2 WHERE id=$1",
+            [useraccount.id, useraccount.challenge]);
     };
     confirm(id){
         return this.db.query("UPDATE useraccount SET isConfirmed=true WHERE id=$1",
             [id]);
     }
-    getAll(id){ //Get all sauf user en cours
+    getAllBesidesCurrent(id){ //Get all sauf user en cours
         return new Promise((resolve, reject) =>
             this.db.query("SELECT id, displayname, login, isConfirmed FROM useraccount WHERE id <> $1", [id])
+                .then(res => resolve(res.rows) )
+                .catch(e => reject(e)));
+    };
+    getAllConfirmed(id){ //Get all sauf user en cours
+        return new Promise((resolve, reject) =>
+            this.db.query("SELECT id, displayname, login, isConfirmed FROM useraccount WHERE id <> $1 AND isconfirmed = true", [id])
                 .then(res => resolve(res.rows) )
                 .catch(e => reject(e)));
     };

@@ -44,20 +44,20 @@ module.exports = (userAccountService) => {
                 expiresIn: jwtExpirySeconds
             })
         },
-        inscriptionMail(user) {
-            jwt.sign(user.login, jwtKey,
+        inscriptionMail(login) {
+            jwt.sign({login}, jwtKey,
                 {
                     algorithm: 'HS256',
-                    //expiresIn: '1d'
+                    expiresIn: '1d'
                 },
                 (err, emailToken) => {
                     const url = `http://localhost:3333/useraccount/confirmation/${emailToken}`;
-
+                    if(!!err) return err;
                     transport.sendMail({
-                        to: user.login,
+                        to: login,
                         subject: 'Confirmer votre mail',
                         html: `<p>Bonjour, <br/> 
-                        Pour finaliser votre inscription sur le site de liste de course cliquez sur le lien suivant : <a href="${url}">${url}</a> <br/>
+                        Pour finaliser votre inscription sur le site de liste de course cliquez sur le lien suivant :<br/> <a href="${url}">${url}</a> <br/>
                         Si vous ne vous êtes pas inscrit sur le site, vous pouvez simplement ignorer ce mail. <br/>
                         Le lien a une durée de vie de 24 heures, après ce délais votre compte sera supprimé. <br/>
                         A très bientôt. <br/><br/><br/>
@@ -75,7 +75,7 @@ module.exports = (userAccountService) => {
                     return
                 }
                 try {
-                    user = await userAccountService.dao.getByLogin(user);
+                    user = await userAccountService.dao.getByLogin(user.login);
                     user.isconfirmed = true;
                     success(user);
                 } catch(e) {
