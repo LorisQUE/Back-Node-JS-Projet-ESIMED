@@ -59,7 +59,7 @@ module.exports = (userAccountService) => {
                         html: `<p>Bonjour, <br/> 
                         Pour finaliser votre inscription sur le site de liste de course cliquez sur le lien suivant :<br/> <a href="${url}">${url}</a> <br/>
                         Si vous ne vous êtes pas inscrit sur le site, vous pouvez simplement ignorer ce mail. <br/>
-                        Le lien a une durée de vie de 24 heures, après ce délais votre compte sera supprimé. <br/>
+                        Le lien a une durée de vie de 24 heures, si vous souhaitez activer le compte après ce délais, rendez-vous sur la page d'inscription du site et cliquez sur  le bouton ayant pour titre "Vous n'avez pas reçu votre mail de confirmation ?co". <br/>
                         A très bientôt. <br/><br/><br/>
                         <i>Merci de ne pas répondre à ce mail</i></p>`
                     });

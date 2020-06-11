@@ -8,8 +8,9 @@ module.exports = (app, svc, jwt) => {
         svc.validatePassword(login, password)
             .then(async authenticated => {
                 const user = await svc.dao.getByLogin(login.trim());
-                if (!authenticated || !user.isconfirmed) return res.status(401).end();
-                res.json({'token': jwt.generateJWT(login)})
+                if (!authenticated) return res.status(401).end();
+                if (!user.isconfirmed) return res.status(409).end();
+                res.json({'token': jwt.generateJWT(login)});
             })
             .catch(e => {
                 console.log(e);
@@ -81,8 +82,9 @@ module.exports = (app, svc, jwt) => {
             const users = await svc.dao.getAllBesidesCurrent(req.user.id);
             const used = users.filter ( x => x.login == user.login );
             if( used.length !== 0 ) return res.status(409).end();
+            await svc.dao.update(user);
             if(!!user.challenge) await svc.updatePassword(user.id, user.challenge);
-            res.json({'token': jwt.generateJWT(user.login)})
+            res.json({'token': jwt.generateJWT(user.login)});
         }catch (e) {
             console.log(e);
             res.status(500).end();
