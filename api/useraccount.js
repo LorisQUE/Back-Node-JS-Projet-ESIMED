@@ -50,7 +50,18 @@ module.exports = (app, svc, jwt) => {
                 return res.status(200).end();
             })
         }catch (e) {
-            console.log(e)
+            console.log(e);
+        }
+    });
+    app.post('/useraccount/reinitialisation/:login', async (req, res) => {
+        try{
+            const login = (req.params.login);
+            const user = await svc.dao.getByLogin(login);
+            if(!(!!user)) return res.status(404).end();
+            jwt.reinitMail(user, login);
+            return res.status(200).end();
+        }catch (e) {
+            console.log(e);
         }
     });
     app.get('/useraccount/resend/:login', async (req, res) =>{
@@ -75,6 +86,37 @@ module.exports = (app, svc, jwt) => {
             res.status(500).end;
         }
     });
+    app.get('/useraccount/reinitialisation/form/:id/:token', async (req, res) => {
+        try{
+            const id = req.params.id;
+            const token = req.params.token;
+            res.redirect('http://localhost:63342/front/index.html?t='+token+'&i='+id);
+        }catch (e) {
+            console.log(e);
+            res.status(500).end;
+        }
+    });
+    app.put('/useraccount/change-pass', async (req, res) => {
+        try{
+            const id = req.body.id;
+            const token = req.body.token;
+            const pass = req.body.pass;
+            const user = await svc.dao.getById(id);
+
+            jwt.reinitConfirm(token, user, res).then(async (rep, err) => {
+                if(!!err){
+                    console.log(err);
+                    res.status(500).end();
+                } else if(res){
+                    await svc.updatePassword(id, pass).then( rep.status(200).end() )
+                }
+
+            })
+        }catch (e) {
+            console.log(e);
+            res.status(500).end();
+        }
+    })
     app.put('/useraccount', jwt.validateJWT, async (req, res) => {
         try{
             const user = req.body;
