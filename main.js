@@ -16,7 +16,7 @@ app.use(cors());
 app.use(morgan('dev')); // toutes les requêtes HTTP dans le log du serveur
 
 //const connectionString = "postgres://user:password@192.168.56.101/instance"
-const connectionString = "postgres://postgres:admin@localhost:5432/listeCourses";
+const connectionString = "postgres://user1:default1@database-1.c4bqhyjezkf6.us-east-1.rds.amazonaws.com:5432/base1";
 const db = new pg.Pool({ connectionString: connectionString });
 const userAccountService = new UserAccountService(db);
 const partageService = new PartageService(db);
