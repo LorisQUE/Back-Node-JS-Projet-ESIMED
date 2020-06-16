@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const jwtKey = 'exemple_cours_secret_key';
 const jwtExpirySeconds = 3600;
-const baseUrl = 'http://localhost:3333/useraccount';
+const baseUrl = 'http://ec2-3-209-101-117.compute-1.amazonaws.com:3333/useraccount';
 const transport = nodemailer.createTransport({
     host:'...',
     service: 'gmail',

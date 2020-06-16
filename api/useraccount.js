@@ -116,7 +116,7 @@ module.exports = (app, svc, jwt) => {
             console.log(e);
             res.status(500).end();
         }
-    })
+    });
     app.put('/useraccount', jwt.validateJWT, async (req, res) => {
         try{
             const user = req.body;
